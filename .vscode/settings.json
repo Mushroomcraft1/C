@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "stdbool.h": "c",
+        "stdio.h": "c",
+        "fen.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "type_traits": "c",
+        "typeinfo": "c",
+        "time.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c",
+        "unistd.h": "c",
+        "float.h": "c",
+        "limits.h": "c",
+        "windows.h": "c",
+        "pthread.h": "c"
+    },
+    "discord.enabled": true,
+    "C_Cpp.errorSquiggles": "enabled"
+}
