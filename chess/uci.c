@@ -7,40 +7,44 @@
 #include <time.h>
 #include "fen.c"
 
-#define help 2090324718
-#define uci 193507782
-#define ucinewgame 157606794
-#define isready 2867576470
-#define setoption 1752732138
-#define name 2090536006
-#define optionValue 277698370
-#define threadsOption 3758332912
-#define pos 193502743
-#define position 1290762938
-#define go 5863419
-#define stop 1053619551
-#define d 177673
-#define display 315443099
-#define debug 256484652
-#define clear 255552908
-#define q 177686
-#define quit 2090665480
-#define fen 193491518
-#define startpos 1765689381
-#define perft 270732646
-#define depth 256499866
-#define movetime 2397115307
-#define infinite 1808929275
-#define wtime 279563563
-#define btime 254659222
-#define winc 2090868182
-#define binc 2090113505
-#define scores 459181940
-#define bitboards 1053619551
-#define flush 259128679
-#define update 552456360
-#define mem 193499140
-#define test 2090756197
+enum command
+{
+    help = 2090324718,
+    uci = 193507782,
+    ucinewgame = 157606794,
+    isready = 2867576470,
+    setoption = 1752732138,
+    optionName = 2090536006,
+    optionValue = 277698370,
+    threadsOption = 3758332912,
+    option = 318227550,
+    pos = 193502743,
+    position = 1290762938,
+    go = 5863419,
+    stop = 2090736459,
+    d = 177673,
+    display = 315443099,
+    debug = 256484652,
+    clear = 255552908,
+    q = 177686,
+    quit = 2090665480,
+    fen = 193491518,
+    startpos = 1765689381,
+    perft = 270732646,
+    depth = 256499866,
+    movetime = 2397115307,
+    infinite = 1808929275,
+    wtime = 279563563,
+    btime = 254659222,
+    winc = 2090868182,
+    binc = 2090113505,
+    scores = 459181940,
+    bitboards = 1053619551,
+    flush = 259128679,
+    update = 552456360,
+    mem = 193499140,
+    test = 2090756197
+};
 
 const unsigned long hash(const char *str)
 {
@@ -53,7 +57,10 @@ const unsigned long hash(const char *str)
 
     while ((c = *str++))
     {
-        hash = ((hash << 5) + hash) + c;
+        if (c != '\r')
+        {
+            hash = ((hash << 5) + hash) + c;
+        }
     }
     return hash;
 }
@@ -66,7 +73,6 @@ int main()
     data->repetitionHistory = malloc(sizeof(unsigned long long) * 512);
     moveGenData->pinned = malloc(sizeof(int) * 64);
     init();
-    printf("%lu\n", hash("mem"));
     printf("-----------\n   | \\_        _____ _                       _            _____ \n   /  .\\_     / ____| |                     (_)          / ____|\n  |   ___)   | |    | |__   ___  ___ ___     _ _ __     | |     \n  |    \\     | |    | '_ \\ / _ \\/ __/ __|   | | '_ \\    | |     \n  |  =  |    | |____| | | |  __/\\__ \\__ \\   | | | | |   | |____ \n  /_____\\     \\_____|_| |_|\\___||___/___/   |_|_| |_|    \\_____|\n [_______]   ===================================================\n-----------\n\n(c) Xavier Marcal 2023\n\n");
     fflush(stdout);
     parseGame(board, data, NULL);
@@ -98,9 +104,9 @@ int main()
             fflush(stdout);
             break;
         case setoption:
-            if (hash(option) == name)
+            if (hash(option) == optionName)
             {
-                char *optionName  = malloc(sizeof(char) * length);
+                char *optionName = malloc(sizeof(char) * length);
                 char *word = strtok(NULL, " ");
                 int idx = 0;
                 while ((hash(word) != optionValue) && (word != NULL))

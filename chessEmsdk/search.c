@@ -37,7 +37,7 @@ struct Package
 pthread_mutex_t idMut, workIDXMut, packageMut, positionsMut;
 clock_t start, end;
 double timeLimit = 0;
-int threadCount = 4;
+int threadCount = 8;
 unsigned long long totalPositions;
 int workIDX = 0;
 int threadID = 0;
@@ -391,18 +391,18 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
         if (ordered != NULL)
         {
             prevBest = ordered[0].move;
-            // for (int i = 0; i < selSearchCount; i++)
-            // {
-            //     struct Data prevData = *data;
-            //     doMove(board, data, moves[i], true);
-            //     struct MoveScore search = searchMain(board, moveGenData, data, selDepth, timeLimit, false, true, false, NULL);
-            //     undoMove(board, data, moves[i], prevData);
-            //     if (search.move.startSquare != search.move.endSquare)
-            //     {
-            //         completed[i] = true;
-            //         results[i] = search.score;
-            //     }
-            // }
+            for (int i = 0; i < selSearchCount; i++)
+            {
+                struct Data prevData = *data;
+                doMove(board, data, moves[i], true);
+                struct MoveScore search = searchMain(board, moveGenData, data, selDepth, timeLimit, false, true, false, NULL);
+                undoMove(board, data, moves[i], prevData);
+                if (search.move.startSquare != search.move.endSquare)
+                {
+                    completed[i] = true;
+                    results[i] = search.score;
+                }
+            }
         }
         else
         {
