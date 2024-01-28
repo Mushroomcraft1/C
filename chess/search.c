@@ -52,7 +52,7 @@ int popCount(unsigned long long x)
     int count = 0;
     while (x)
     {
-        count++;
+        ++count;
         x &= x - 1;
     }
     return count;
@@ -313,7 +313,7 @@ void *searchWorker(void *arg)
             break;
         }
         int workID = workIDX;
-        workIDX++;
+        ++workIDX;
         pthread_mutex_unlock(&workIDXMut);
         struct Move move = workQueue[workID];
         struct Data prevData = *data;
@@ -368,7 +368,7 @@ void freeLines(int moves)
 }
 
 struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct Data *data, int depth, long timeLimit, bool log, bool canQuit, bool recursion, struct MoveScore *ordered)
-{        
+{
     struct Move *moves = updateLegalMoves(board, moveGenData, data);
     int oldMoveCount = moveGenData->legalMoveCount;
 
@@ -418,12 +418,6 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
             threadCountLock = 1;
         }
 
-        if (selSearchCount == oldMoveCount)
-        {
-            depth = selDepth;
-            threadCountLock = 0;
-        }
-
         struct Package *package = malloc(sizeof(struct Package));
         package->board = board;
         package->moveGenData = *moveGenData;
@@ -432,7 +426,7 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
         package->useTime = canQuit;
         package->threadCount = threadCountLock;
         threadID = 0;
-        workIDX = selSearchCount;
+        workIDX = 0;
         stats = (struct Stats){0};
 
         pthread_t *threads = malloc(sizeof(pthread_t) * threadCountLock);
@@ -445,7 +439,6 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
         {
             pthread_join(threads[i], NULL);
         }
-
         free(threads);
         free(package);
         memcpy(moveScores, results, sizeof(struct MoveScore) * oldMoveCount);
@@ -464,8 +457,10 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
                 }
                 moveScores[idx].score = results[i];
                 moveScores[idx].move = moves[i];
-                idx++;
+                ++idx;
             }
+            char *str = moveToString(move);
+            free(str);
         }
         // If the search was canceled and the results are useless because the previous best move wasn't searched, return early
         if (ordered != NULL && (idx == 0 || searchedPrevBest == false || (clock() >= timeLimit && canQuit)))
@@ -494,7 +489,7 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
             if (abs(bestMove.score) >= 1000000)
             {
                 mate = depth - abs(bestMove.score) + 1000000;
-                score = malloc(sizeof(char) * (int)log10(mate) + 7);
+                score = malloc(sizeof(char) * ((int)log10(mate | 1) + 7)); // OR log10(mate) with 1, because log10(0) is -Infinity
                 if (bestMove.score > 0)
                 {
                     snprintf(score, sizeof(score), "mate %d", mate);
@@ -506,8 +501,8 @@ struct MoveScore searchMain(int *board, struct MoveGenData *moveGenData, struct 
             }
             else
             {
-                score = malloc(sizeof(char) * (int)log10(abs(bestMove.score)) + 6);
-                if (bestMove.score > 0)
+                score = malloc(sizeof(char) * ((int)log10(abs(bestMove.score) | 1) + 6)); // OR log10(score) with 1, because log10(0) is -Infinity
+                if (bestMove.score >= 0)
                 {
                     snprintf(score, sizeof(score), "cp %i", bestMove.score);
                 }

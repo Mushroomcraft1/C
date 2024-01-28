@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 #include "search.c"
 
 char testFens[][90] = {
@@ -462,9 +463,9 @@ char *parseGame(int *board, struct Data *data, char *str)
 
 void testPositions(int *board, struct MoveGenData *moveGenData, struct Data *data)
 {
-    int passed =  0;
-    clock_t start, end;
-    start = clock();
+    int passed = 0;
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
     for (int testN = 0; testN < totalTests; testN++)
     {
         int expectedPositionCount = expectedResults[testN];
@@ -486,8 +487,8 @@ void testPositions(int *board, struct MoveGenData *moveGenData, struct Data *dat
         printf(" [%i / %i]\n\n", passed, testN + 1);
         fflush(stdout);
     }
-    end = clock();
-    double duration = (double)(end - start) / CLOCKS_PER_SEC;
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double duration = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("--------------------\n  Test Complete\n  Time: %.03fs\n  Passed: %i / %i\n  Failed: %i / %i\n--------------------\n", duration, passed, totalTests, totalTests - passed, totalTests);
     fflush(stdout);
 }
