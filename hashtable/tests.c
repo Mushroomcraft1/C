@@ -1,4 +1,4 @@
-#define TEST
+#include "../memorytest.c"
 #include <time.h> 
 #include "hashtable.c"
 #include "u64hashtable.c"

@@ -4,32 +4,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-#ifdef TEST
-static int memoryAllocationCounter = 0;
-
-#define malloc(size) ({            \
-    void *ptr = malloc(size);      \
-    if (ptr)                       \
-    {                              \
-        memoryAllocationCounter++; \
-    }                              \
-    ptr;                           \
-})
-
-#define calloc(asize, bsize) ({       \
-    void *ptr = calloc(asize, bsize); \
-    if (ptr)                          \
-    {                                 \
-        memoryAllocationCounter++;    \
-    }                                 \
-    ptr;                              \
-})
-
-#define free(ptr) ({           \
-    free(ptr);                 \
-    memoryAllocationCounter--; \
-})
-#endif
+/*
+    Written by Mushroomcraft
+    https://github.com/Mushroomcraft1/C/blob/main/hashtable/hashtable.c
+*/
 
 struct BucketListNode
 {

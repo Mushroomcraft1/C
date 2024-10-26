@@ -3,6 +3,11 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+/*
+    Written by Mushroomcraft
+    https://github.com/Mushroomcraft1/C/blob/main/hashtable/u64hashtable.c
+*/
+
 struct u64BucketListNode
 {
     struct u64BucketListNode *next;
