@@ -13,11 +13,11 @@ struct u32BucketListNode
 struct u32HashTable
 {
     struct u32BucketListNode **table;
-    size_t elements;
-    size_t size;
+    uint32_t elements;
+    uint32_t size;
 };
 
-struct u32HashTable *u32HashTableCreate(size_t size)
+struct u32HashTable *u32HashTableCreate(uint32_t size)
 {
     if (size < 128)
     {
@@ -40,10 +40,9 @@ struct u32HashTable *u32HashTableCreate(size_t size)
     return hashTable;
 }
 
-size_t uint32HashFunction(uint32_t x, size_t size)
+uint32_t uint32HashFunction(uint32_t x, uint32_t size)
 {
-    x ^= 0x5555555ul;
-    return (size_t)x % size;
+    return x % size;
 }
 
 void u32HashTableClear(struct u32HashTable *hashTable)
@@ -77,7 +76,7 @@ uint32_t *u32HashTableKeys(struct u32HashTable *hashTable)
     int size = hashTable->size;
     int elements = hashTable->elements;
     uint32_t *keys = calloc(sizeof(uint32_t), elements);
-    size_t idx = 0;
+    uint32_t idx = 0;
     struct u32BucketListNode **table = hashTable->table;
 
     for (int i = 0; i < size; ++i)
@@ -101,7 +100,7 @@ uint32_t *u32HashTableKeys(struct u32HashTable *hashTable)
 
 void u32HashTableSet(struct u32HashTable *hashTable, uint32_t key, uint32_t value)
 {
-    size_t hashedKey = uint32HashFunction(key, hashTable->size);
+    uint32_t hashedKey = uint32HashFunction(key, hashTable->size);
 
     struct u32BucketListNode **address = &hashTable->table[hashedKey];
     struct u32BucketListNode *node = *address;
@@ -126,7 +125,7 @@ void u32HashTableSet(struct u32HashTable *hashTable, uint32_t key, uint32_t valu
 
 void u32HashTableRemove(struct u32HashTable *hashTable, uint32_t key)
 {
-    size_t hashedKey = uint32HashFunction(key, hashTable->size);
+    uint32_t hashedKey = uint32HashFunction(key, hashTable->size);
     struct u32BucketListNode *node = hashTable->table[hashedKey];
     struct u32BucketListNode *prev = NULL;
     while (node != NULL)
@@ -152,7 +151,7 @@ void u32HashTableRemove(struct u32HashTable *hashTable, uint32_t key)
 
 uint32_t u32HashTableGet(struct u32HashTable *hashTable, uint32_t key)
 {
-    size_t hashedKey = uint32HashFunction(key, hashTable->size);
+    uint32_t hashedKey = uint32HashFunction(key, hashTable->size);
     struct u32BucketListNode *node = hashTable->table[hashedKey];
     while (node != NULL)
     {

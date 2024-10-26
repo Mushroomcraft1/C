@@ -13,11 +13,11 @@ struct u64BucketListNode
 struct u64HashTable
 {
     struct u64BucketListNode **table;
-    size_t elements;
-    size_t size;
+    uint64_t elements;
+    uint64_t size;
 };
 
-struct u64HashTable *u64HashTableCreate(size_t size)
+struct u64HashTable *u64HashTableCreate(uint64_t size)
 {
     if (size < 128)
     {
@@ -40,10 +40,10 @@ struct u64HashTable *u64HashTableCreate(size_t size)
     return hashTable;
 }
 
-size_t uint64HashFunction(uint64_t x, size_t size)
+
+uint64_t uint64HashFunction(uint64_t x, uint64_t size)
 {
-    x ^= 0x5555555555555555ull;
-    return (size_t)x % size;
+    return  x % size;
 }
 
 void u64HashTableClear(struct u64HashTable *hashTable)
@@ -77,7 +77,7 @@ uint64_t *u64HashTableKeys(struct u64HashTable *hashTable)
     int size = hashTable->size;
     int elements = hashTable->elements;
     uint64_t *keys = calloc(sizeof(uint64_t), elements);
-    size_t idx = 0;
+    uint64_t idx = 0;
     struct u64BucketListNode **table = hashTable->table;
 
     for (int i = 0; i < size; ++i)
@@ -101,7 +101,7 @@ uint64_t *u64HashTableKeys(struct u64HashTable *hashTable)
 
 void u64HashTableSet(struct u64HashTable *hashTable, uint64_t key, uint64_t value)
 {
-    size_t hashedKey = uint64HashFunction(key, hashTable->size);
+    uint64_t hashedKey = uint64HashFunction(key, hashTable->size);
 
     struct u64BucketListNode **address = &hashTable->table[hashedKey];
     struct u64BucketListNode *node = *address;
@@ -126,7 +126,7 @@ void u64HashTableSet(struct u64HashTable *hashTable, uint64_t key, uint64_t valu
 
 void u64HashTableRemove(struct u64HashTable *hashTable, uint64_t key)
 {
-    size_t hashedKey = uint64HashFunction(key, hashTable->size);
+    uint64_t hashedKey = uint64HashFunction(key, hashTable->size);
     struct u64BucketListNode *node = hashTable->table[hashedKey];
     struct u64BucketListNode *prev = NULL;
     while (node != NULL)
@@ -152,7 +152,7 @@ void u64HashTableRemove(struct u64HashTable *hashTable, uint64_t key)
 
 uint64_t u64HashTableGet(struct u64HashTable *hashTable, uint64_t key)
 {
-    size_t hashedKey = uint64HashFunction(key, hashTable->size);
+    uint64_t hashedKey = uint64HashFunction(key, hashTable->size);
     struct u64BucketListNode *node = hashTable->table[hashedKey];
     while (node != NULL)
     {
