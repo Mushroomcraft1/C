@@ -87,7 +87,7 @@ int main()
         switch (hash(cmd))
         {
         case help:
-            printf("----------\n Commands:\n----------\n uci\n ucinewgame\n isready\n setoption name [threads] value ...\n position [fen | startpos] moves ...\n go [perft | depth | movetime | wtime | btime | winc | binc]\n display\n debug [bitboards | scores | update | test | flush]\n clear\n quit\n");
+            printf("----------\n Commands:\n----------\n uci\n ucinewgame\n isready\n setoption name [Threads] value ...\n position [fen | startpos] moves ...\n go [perft | depth | movetime | wtime | btime | winc | binc]\n display\n debug [bitboards | scores | update | test | flush]\n clear\n quit\n");
             fflush(stdout);
             break;
         case uci:
