@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 
+#ifdef TEST
 static int memoryAllocationCounter = 0;
 
 #define malloc(size) ({            \
@@ -24,11 +25,11 @@ static int memoryAllocationCounter = 0;
     ptr;                              \
 })
 
-#define free(ptr)                  \
-    {                              \
-        free(ptr);                 \
-        memoryAllocationCounter--; \
-    }
+#define free(ptr) ({           \
+    free(ptr);                 \
+    memoryAllocationCounter--; \
+})
+#endif
 
 struct BucketListNode
 {
@@ -201,7 +202,7 @@ void *HashTableGet(struct HashTable *hashTable, void *key)
 
 bool intCompareFunction(void *a, void *b)
 {
-    return ((int32_t *)a) == ((int32_t *)b);
+    return *(int32_t *)a == *(int32_t *)b;
 }
 
 uint32_t intHashFunction(void *x)

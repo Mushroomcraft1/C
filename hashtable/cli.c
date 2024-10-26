@@ -1,3 +1,4 @@
+#define TEST
 #include "hashtable.c"
 
 enum command
@@ -88,7 +89,7 @@ int32_t main()
     }
 
     free(str);
-    HashTableFree(hashTable);
+    u64HashTableFree(hashTable);
     printf("memory leaks: %i\n", memoryAllocationCounter);
     return 0;
 }

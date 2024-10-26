@@ -20,7 +20,8 @@
         "emscripten.h": "c",
         "em_types.h": "c",
         "math.h": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "compare": "c"
     },
     "discord.enabled": true,
     "C_Cpp.errorSquiggles": "enabled"
